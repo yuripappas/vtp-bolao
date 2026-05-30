@@ -155,17 +155,20 @@ async function submitLogin() {
 
 function updateHeaderState() {
   const session = getSession();
-  const loginBtn  = document.getElementById('header-login-btn');
-  const logoutBtn = document.getElementById('header-logout-btn');
-  const headerName = document.getElementById('header-name');
+  const registerBtn = document.getElementById('header-register-btn');
+  const loginBtn    = document.getElementById('header-login-btn');
+  const logoutBtn   = document.getElementById('header-logout-btn');
+  const headerName  = document.getElementById('header-name');
   if (session) {
-    if (loginBtn)  loginBtn.style.display  = 'none';
-    if (logoutBtn) logoutBtn.style.display = 'inline-flex';
-    if (headerName) headerName.textContent = session.name.split(' ')[0];
+    if (registerBtn) registerBtn.style.display = 'none';
+    if (loginBtn)    loginBtn.style.display    = 'none';
+    if (logoutBtn)   logoutBtn.style.display   = 'inline-flex';
+    if (headerName)  headerName.textContent    = session.name.split(' ')[0];
   } else {
-    if (loginBtn)  loginBtn.style.display  = 'inline-flex';
-    if (logoutBtn) logoutBtn.style.display = 'none';
-    if (headerName) headerName.textContent = '';
+    if (registerBtn) registerBtn.style.display = 'inline-flex';
+    if (loginBtn)    loginBtn.style.display    = 'inline-flex';
+    if (logoutBtn)   logoutBtn.style.display   = 'none';
+    if (headerName)  headerName.textContent    = '';
   }
 }
 

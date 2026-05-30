@@ -6,35 +6,105 @@
   <title>Bolão Copa 2026 — Vai Ter Pizza!</title>
   <meta name="description" content="Faça seus palpites, acumule pontos e concorra a 1 ano de pizza grátis!">
   <link rel="stylesheet" href="css/bolao.css">
+  <style>
+    /* ── Dark theme VTP ──────────────────────────────────────────── */
+    :root {
+      --bg:                #0A0318;
+      --bg-subtle:         #130726;
+      --bg-elevated:       #160835;
+      --bg-inverse:        #07010F;
+      --fg:                #EDE8FF;
+      --fg-muted:          rgba(237,232,255,.65);
+      --fg-subtle:         rgba(237,232,255,.38);
+      --fg-inverse:        #0A0318;
+      --border:            rgba(255,255,255,.10);
+      --border-strong:     rgba(255,255,255,.18);
+      --card-bg:           #1E0B42;
+      --card-border:       rgba(255,255,255,.13);
+      --card-border-hover: rgba(245,168,0,.35);
+      --card-warm-bg:      #1E1000;
+      --card-warm-border:  rgba(245,168,0,.25);
+      --input-bg:          #130726;
+      --input-border:      rgba(255,255,255,.14);
+      --input-border-hover:rgba(245,168,0,.45);
+      --input-border-focus:#F5A800;
+      --input-fg:          #EDE8FF;
+      --input-placeholder: rgba(237,232,255,.28);
+      --focus-ring:        rgba(245,168,0,.20);
+      --accent:            #F5A800;
+      --accent-subtle:     rgba(245,168,0,.10);
+      --modal-bg:          #190A33;
+      --modal-overlay:     rgba(5,0,15,.92);
+      --modal-shadow:      0 25px 80px rgba(0,0,0,.70);
+      --action-primary-bg:       #F5A800;
+      --action-primary-fg:       #000;
+      --action-primary-bg-hover: #D97706;
+      --success-bg:   rgba(74,222,128,.08);
+      --success-fg:   #4ADE80;
+      --success-border: rgba(74,222,128,.2);
+      --success-bg-bold: #166534;
+      --warning-bg:   rgba(245,168,0,.10);
+      --warning-fg:   #F5A800;
+      --warning-border: rgba(245,168,0,.2);
+      --danger-bg:    rgba(239,68,68,.10);
+      --danger-fg:    #F87171;
+      --danger-border: rgba(239,68,68,.2);
+      --danger-bg-bold: #991B1B;
+      --info-bg:      rgba(107,33,212,.12);
+      --info-fg:      #A78BFA;
+      --info-border:  rgba(107,33,212,.2);
+      --shadow-xs: 0 1px 4px rgba(0,0,0,.35);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,.45);
+      --shadow-md: 0 4px 20px rgba(0,0,0,.55);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,.60);
+      --orange-bg:     rgba(245,168,0,.06);
+      --orange-border: rgba(245,168,0,.18);
+    }
+  </style>
 </head>
 <body>
+
+<!-- BARRA DE COMUNICAÇÃO (publicidade / avisos) -->
+<!-- Para editar: altere o texto entre as tags abaixo -->
+<div class="promo-bar" id="promo-bar">
+  🍕 <strong>Vai Ter Pizza!</strong> — Aberto todos os dias das 18h às 23h &nbsp;·&nbsp; Peça via WhatsApp ou Delivery
+  <button class="promo-bar-close" onclick="document.getElementById('promo-bar').remove()" aria-label="Fechar">×</button>
+</div>
 
 <!-- HEADER -->
 <header class="site-header">
   <div class="site-header-inner">
     <a href="/" class="site-logo">Vai Ter Pizza!</a>
-    <div style="display:flex;align-items:center;gap:var(--space-2)">
+    <div class="header-actions">
       <span id="header-name" style="font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--fg-muted)"></span>
-      <button id="header-login-btn" class="btn btn-ghost btn-sm" onclick="showLoginModal()">Entrar</button>
-      <button id="header-logout-btn" class="btn btn-ghost btn-sm" onclick="logout()" style="display:none">Sair</button>
+      <button id="header-register-btn" class="btn-whatsapp" style="min-height:36px;padding:8px var(--space-4);font-size:var(--text-sm)" onclick="showRegisterModal()">Cadastrar</button>
+      <button id="header-login-btn" class="btn-hero-ghost" style="min-height:36px;padding:8px var(--space-4);font-size:var(--text-sm)" onclick="showLoginModal()">Entrar</button>
+      <button id="header-logout-btn" class="btn-hero-ghost" style="display:none;min-height:36px;padding:8px var(--space-4);font-size:var(--text-sm)" onclick="logout()">Sair</button>
     </div>
   </div>
 </header>
+
+<!-- BANNER CAROUSEL (gerenciado pelo admin) -->
+<div id="banner-carousel"></div>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-eyebrow">Vai Ter Pizza! · Bolão Copa 2026</div>
   <h1>Palpite. Pontue.<br><em>Ganhe pizza.</em></h1>
-  <p class="hero-sub">Acerte os placares de todos os jogos, acumule pontos<br>e concorra ao maior prêmio da Copa.</p>
+  <p class="hero-sub">Acerte os placares, acumule pontos e concorra ao maior prêmio da Copa.</p>
   <div class="prize-badge">
-    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
     1º lugar: 1 pizza por mês durante 1 ano inteiro
   </div>
-</div>
-
-<!-- BANNER CAROUSEL (gerenciado pelo admin) -->
-<div id="banner-carousel">
-  <!-- carregado via banners.js -->
+  <div class="hero-actions">
+    <button class="btn-whatsapp" onclick="shareWhatsApp()">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Convidar amigos
+    </button>
+    <button class="btn-hero-ghost" onclick="showRegisterModal()">
+      Participar grátis
+    </button>
+  </div>
 </div>
 
 <!-- COMO PONTUAR -->
@@ -46,15 +116,15 @@
     </div>
     <div class="points-item">
       <div class="points-val">7pts</div>
-      <div class="points-label">Saldo de gols correto</div>
+      <div class="points-label">Saldo de gols</div>
     </div>
     <div class="points-item">
       <div class="points-val">5pts</div>
-      <div class="points-label">Vencedor correto</div>
+      <div class="points-label">Vencedor certo</div>
     </div>
     <div class="points-item brazil-bonus">
-      <div class="points-val">x3</div>
-      <div class="points-label">Todos os pontos em jogos do Brasil + R$30 no placar exato</div>
+      <div class="points-val">×3</div>
+      <div class="points-label">Jogos do Brasil + R$30 no placar exato</div>
     </div>
   </div>
 </div>
@@ -74,68 +144,141 @@
   </div>
 </div>
 
-<!-- CONTEÚDO PRINCIPAL -->
-<div class="container">
+<!-- LAYOUT PRINCIPAL -->
+<div class="main-wrapper">
+  <div class="main-layout">
 
-  <!-- STATS DO PARTICIPANTE (visível após login) -->
-  <div id="my-stats-section" style="display:none;padding-top:var(--space-6)">
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-val" id="stat-points">0</div>
-        <div class="stat-label">Pontos</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-val" id="stat-exact">0</div>
-        <div class="stat-label">Placares exatos</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-val" id="stat-coupon">10%</div>
-        <div class="stat-label">Próximo cupom</div>
-      </div>
-    </div>
-    <div id="coupon-progress"></div>
-  </div>
+    <!-- COLUNA DE JOGOS -->
+    <div class="matches-col">
 
-  <!-- TABS -->
-  <div class="section">
-    <div class="tabs">
-      <button class="tab active" onclick="mainTab(this,'tab-jogos')">Jogos</button>
-      <button class="tab" onclick="mainTab(this,'tab-ranking')">Ranking</button>
-      <button class="tab" onclick="mainTab(this,'tab-cupons')">Meus cupons</button>
-    </div>
-
-    <!-- ABA JOGOS -->
-    <div id="tab-jogos">
-      <div id="match-list">
-        <div style="text-align:center;padding:var(--space-10);color:var(--fg-subtle);font-size:var(--text-sm)">Carregando jogos...</div>
+      <!-- MEUS STATS (visível após login) -->
+      <div id="my-stats-section" style="display:none;margin-bottom:var(--space-5)">
+        <div class="sidebar-card" style="margin-bottom:var(--space-4)">
+          <div class="sidebar-card-title">Minha pontuação</div>
+          <div class="stats-grid" style="margin-bottom:var(--space-4)">
+            <div class="stat-card">
+              <div class="stat-val" id="stat-points">0</div>
+              <div class="stat-label">Pontos</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" id="stat-exact">0</div>
+              <div class="stat-label">Cravadas</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" id="stat-coupon">10%</div>
+              <div class="stat-label">Próx. cupom</div>
+            </div>
+          </div>
+          <div id="coupon-progress"></div>
+        </div>
       </div>
-      <div id="palpitar-cta" style="display:none;text-align:center;padding:var(--space-6) 0">
-        <button class="btn btn-primary" style="max-width:360px;margin:0 auto" onclick="showRegisterModal()">
-          Cadastrar e confirmar palpites
+
+      <!-- TABS DE ABA (jogos / cupons / ranking mobile) -->
+      <div class="tabs" style="margin-bottom:var(--space-5)">
+        <button class="tab active" onclick="mainTab(this,'tab-jogos')">Jogos</button>
+        <button class="tab" onclick="mainTab(this,'tab-cupons')">Meus cupons</button>
+        <button class="tab" onclick="mainTab(this,'tab-ranking-mobile')">Ranking</button>
+      </div>
+
+      <!-- ABA JOGOS -->
+      <div id="tab-jogos">
+        <!-- FILTROS POR FASE -->
+        <div class="round-filters" id="round-filters">
+          <button class="round-tab active" onclick="setFilter('all', this)">Todos</button>
+          <button class="round-tab" onclick="setFilter('brazil', this)">🇧🇷 Brasil</button>
+          <button class="round-tab" onclick="setFilter('groups', this)">Grupos</button>
+          <button class="round-tab" onclick="setFilter('r16', this)">Oitavas</button>
+          <button class="round-tab" onclick="setFilter('qf', this)">Quartas</button>
+          <button class="round-tab" onclick="setFilter('sf', this)">Semi</button>
+          <button class="round-tab" onclick="setFilter('final', this)">Final</button>
+        </div>
+
+        <div id="match-list">
+          <div style="text-align:center;padding:var(--space-10);color:var(--fg-subtle);font-size:var(--text-sm)">Carregando jogos...</div>
+        </div>
+
+        <div id="palpitar-cta" style="display:none;text-align:center;padding:var(--space-6) 0">
+          <button class="btn-palpitar" style="max-width:360px;margin:0 auto" onclick="showRegisterModal()">
+            Cadastrar e confirmar palpites
+          </button>
+          <p style="font-size:var(--text-xs);color:var(--fg-subtle);margin-top:var(--space-2)">
+            Seus palpites foram salvos. Cadastre-se para pontuar.
+          </p>
+        </div>
+      </div>
+
+      <!-- ABA CUPONS -->
+      <div id="tab-cupons" style="display:none">
+        <div id="coupons-container"></div>
+      </div>
+
+      <!-- ABA RANKING MOBILE -->
+      <div id="tab-ranking-mobile" style="display:none">
+        <div id="ranking-mobile-container"></div>
+      </div>
+
+    </div><!-- /matches-col -->
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- CONVIDAR AMIGOS -->
+      <div class="invite-card">
+        <div class="invite-emoji">📲</div>
+        <div class="invite-title">Chama os amigos!</div>
+        <div class="invite-sub">Quanto mais gente, mais animado fica o bolão. Manda o link pelo WhatsApp agora.</div>
+        <button class="btn-invite" onclick="shareWhatsApp()">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Convidar pelo WhatsApp
         </button>
-        <p style="font-size:var(--text-xs);color:var(--fg-subtle);margin-top:var(--space-2)">
-          Seus palpites foram salvos. Cadastre-se para pontuar.
-        </p>
       </div>
-    </div>
 
-    <!-- ABA RANKING -->
-    <div id="tab-ranking" style="display:none">
-      <div id="ranking-container"></div>
-    </div>
+      <!-- RANKING -->
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">🏆 Ranking geral</div>
+        <div id="ranking-sidebar">
+          <div style="color:var(--fg-subtle);font-size:var(--text-sm);text-align:center;padding:var(--space-4)">Carregando...</div>
+        </div>
+      </div>
 
-    <!-- ABA CUPONS -->
-    <div id="tab-cupons" style="display:none">
-      <div id="coupons-container"></div>
-    </div>
-  </div>
+      <!-- REGRAS DE PONTUAÇÃO -->
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">📋 Como pontuar</div>
+        <div class="rule-item">
+          <span class="rule-label">Placar exato</span>
+          <span class="rule-pts">10 pts</span>
+        </div>
+        <div class="rule-item">
+          <span class="rule-label">Saldo de gols certo</span>
+          <span class="rule-pts">7 pts</span>
+        </div>
+        <div class="rule-item">
+          <span class="rule-label">Só o vencedor</span>
+          <span class="rule-pts">5 pts</span>
+        </div>
+        <div class="rule-item">
+          <span class="rule-label">Jogos do Brasil</span>
+          <span class="rule-pts green">×3 tudo</span>
+        </div>
+        <div class="rule-item">
+          <span class="rule-label">Placar exato Brasil</span>
+          <span class="rule-pts green">+ R$30</span>
+        </div>
+        <div style="margin-top:var(--space-4);padding:var(--space-3);background:rgba(245,168,0,.07);border-radius:var(--radius-md);border:1px solid rgba(245,168,0,.15)">
+          <div style="font-size:var(--text-xs);color:var(--brand-orange);font-weight:var(--weight-bold);margin-bottom:var(--space-1)">🥇 Prêmio do 1º lugar</div>
+          <div style="font-size:var(--text-xs);color:var(--fg-muted);line-height:1.5">1 pizza por mês durante 12 meses · Retirada no local · Sem custo algum</div>
+        </div>
+      </div>
 
-</div>
+    </div><!-- /sidebar -->
+
+  </div><!-- /main-layout -->
+</div><!-- /main-wrapper -->
 
 <!-- FOOTER -->
 <footer class="site-footer">
   <strong>Vai Ter Pizza!</strong> · Bolão Copa 2026<br>
-  Prêmios sujeitos a regulamento · 1 pizza/mês por 12 meses, retirada no local · Sem custos para participar
+  Prêmios sujeitos a regulamento · 1 pizza/mês por 12 meses, retirada no local · Participação gratuita
 </footer>
 
 <div id="toast-container"></div>
@@ -148,23 +291,48 @@
 <script src="js/auth.js"></script>
 <script src="js/coupons.js"></script>
 <script>
+/* ── TABS PRINCIPAIS ─────────────────────────────────────────── */
 function mainTab(btn, tabId) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  ['tab-jogos','tab-ranking','tab-cupons'].forEach(id => {
+  ['tab-jogos','tab-cupons','tab-ranking-mobile'].forEach(id => {
     document.getElementById(id).style.display = id === tabId ? '' : 'none';
   });
-  if (tabId === 'tab-ranking') loadRanking('ranking-container');
-  if (tabId === 'tab-cupons')  loadMyCoupons('coupons-container');
+  if (tabId === 'tab-cupons')         loadMyCoupons('coupons-container');
+  if (tabId === 'tab-ranking-mobile') loadRanking('ranking-mobile-container');
 }
 
+/* ── FILTROS DE FASE ─────────────────────────────────────────── */
+let _activeFilter = 'all';
+function setFilter(filter, btn) {
+  _activeFilter = filter;
+  document.querySelectorAll('.round-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderMatchList('match-list', { filter });
+}
+
+/* ── WHATSAPP SHARE ──────────────────────────────────────────── */
+function shareWhatsApp() {
+  const url = window.location.origin + (window.location.pathname.replace(/\/$/, ''));
+  const text =
+    `🍕 *Bolão Copa 2026 — Vai Ter Pizza!*\n\n` +
+    `Participe do nosso bolão GRATUITO!\n` +
+    `✅ Faça palpites nos jogos da Copa\n` +
+    `🎟️ Ganhe cupons de desconto a cada placar exato\n` +
+    `🏆 1º lugar ganha *1 pizza por mês durante 1 ano*!\n\n` +
+    `👉 ${url}`;
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+/* ── INIT ────────────────────────────────────────────────────── */
 async function init() {
   const session = getSession();
-  loadBanners(); // carrega banners em paralelo
+  loadBanners();
   await loadMatches();
   if (session) await loadMyPredictions(session.id);
-  renderMatchList('match-list');
+  renderMatchList('match-list', { filter: 'all' });
   updateHeaderState();
+  loadSidebarRanking();
   if (session) {
     document.getElementById('my-stats-section').style.display = '';
     refreshMyStats();
@@ -173,9 +341,9 @@ async function init() {
 }
 
 function checkPendingCTA() {
-  const session = getSession();
-  const pending = getPending();
-  const cta = document.getElementById('palpitar-cta');
+  const session  = getSession();
+  const pending  = getPending();
+  const cta      = document.getElementById('palpitar-cta');
   cta.style.display = (!session && pending.length > 0) ? '' : 'none';
 }
 
