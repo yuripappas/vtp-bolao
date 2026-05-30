@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Bolão Copa 2026</title>
+  <link rel="stylesheet" href="css/bolao.css">
+  <style>
+    table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+    th { text-align: left; padding: var(--space-2) var(--space-3); border-bottom: 2px solid var(--border); font-weight: var(--weight-semibold); color: var(--fg-muted); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: var(--tracking-caps); }
+    td { padding: var(--space-3); border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    select.inp { appearance: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <span class="site-logo">Bolão — Admin</span>
+    <a href="index.html" class="btn btn-ghost btn-sm">Ver site</a>
+  </div>
+</header>
+
+<div id="admin-content">
+  <div style="text-align:center;padding:var(--space-20);color:var(--fg-subtle);font-size:var(--text-sm)">Carregando...</div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="js/supabase.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/admin.js"></script>
+<script>adminInit();</script>
+</body>
+</html>

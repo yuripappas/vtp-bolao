@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bolão Copa 2026 — Vai Ter Pizza!</title>
+  <meta name="description" content="Faça seus palpites, acumule pontos e concorra a 1 ano de pizza grátis!">
+  <link rel="stylesheet" href="css/bolao.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="/" class="site-logo">Vai Ter Pizza!</a>
+    <div style="display:flex;align-items:center;gap:var(--space-2)">
+      <span id="header-name" style="font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--fg-muted)"></span>
+      <button id="header-login-btn" class="btn btn-ghost btn-sm" onclick="showLoginModal()">Entrar</button>
+      <button id="header-logout-btn" class="btn btn-ghost btn-sm" onclick="logout()" style="display:none">Sair</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Vai Ter Pizza! · Bolão Copa 2026</div>
+  <h1>Palpite. Pontue.<br><em>Ganhe pizza.</em></h1>
+  <p class="hero-sub">Acerte os placares de todos os jogos, acumule pontos<br>e concorra ao maior prêmio da Copa.</p>
+  <div class="prize-badge">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    1º lugar: 1 pizza por mês durante 1 ano inteiro
+  </div>
+</div>
+
+<!-- COMO PONTUAR -->
+<div class="points-strip">
+  <div class="points-grid">
+    <div class="points-item">
+      <div class="points-val">10pts</div>
+      <div class="points-label">Placar exato</div>
+    </div>
+    <div class="points-item">
+      <div class="points-val">7pts</div>
+      <div class="points-label">Saldo de gols correto</div>
+    </div>
+    <div class="points-item">
+      <div class="points-val">5pts</div>
+      <div class="points-label">Vencedor correto</div>
+    </div>
+    <div class="points-item brazil-bonus">
+      <div class="points-val">x3</div>
+      <div class="points-label">Todos os pontos em jogos do Brasil + R$30 no placar exato</div>
+    </div>
+  </div>
+</div>
+
+<!-- CUPONS PROGRESSIVOS -->
+<div class="coupons-strip">
+  <div class="coupons-strip-inner">
+    <div class="coupons-eyebrow">Cupons de desconto por placares exatos</div>
+    <div class="coupons-tiers">
+      <div class="coupon-tier">1 cravada → <strong>10%</strong></div>
+      <div class="coupon-tier">2 → <strong>20%</strong></div>
+      <div class="coupon-tier">3 → <strong>30%</strong></div>
+      <div class="coupon-tier">4 → <strong>40%</strong></div>
+      <div class="coupon-tier max">5+ → <strong>50% máximo</strong></div>
+    </div>
+    <div class="coupons-footnote">Não acumulativo com outras promoções · Brasil (placar exato) = R$30 fixo · Retirada no local</div>
+  </div>
+</div>
+
+<!-- CONTEÚDO PRINCIPAL -->
+<div class="container">
+
+  <!-- STATS DO PARTICIPANTE (visível após login) -->
+  <div id="my-stats-section" style="display:none;padding-top:var(--space-6)">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-val" id="stat-points">0</div>
+        <div class="stat-label">Pontos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-exact">0</div>
+        <div class="stat-label">Placares exatos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-coupon">10%</div>
+        <div class="stat-label">Próximo cupom</div>
+      </div>
+    </div>
+    <div id="coupon-progress"></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="section">
+    <div class="tabs">
+      <button class="tab active" onclick="mainTab(this,'tab-jogos')">Jogos</button>
+      <button class="tab" onclick="mainTab(this,'tab-ranking')">Ranking</button>
+      <button class="tab" onclick="mainTab(this,'tab-cupons')">Meus cupons</button>
+    </div>
+
+    <!-- ABA JOGOS -->
+    <div id="tab-jogos">
+      <div id="match-list">
+        <div style="text-align:center;padding:var(--space-10);color:var(--fg-subtle);font-size:var(--text-sm)">Carregando jogos...</div>
+      </div>
+      <div id="palpitar-cta" style="display:none;text-align:center;padding:var(--space-6) 0">
+        <button class="btn btn-primary" style="max-width:360px;margin:0 auto" onclick="showRegisterModal()">
+          Cadastrar e confirmar palpites
+        </button>
+        <p style="font-size:var(--text-xs);color:var(--fg-subtle);margin-top:var(--space-2)">
+          Seus palpites foram salvos. Cadastre-se para pontuar.
+        </p>
+      </div>
+    </div>
+
+    <!-- ABA RANKING -->
+    <div id="tab-ranking" style="display:none">
+      <div id="ranking-container"></div>
+    </div>
+
+    <!-- ABA CUPONS -->
+    <div id="tab-cupons" style="display:none">
+      <div id="coupons-container"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <strong>Vai Ter Pizza!</strong> · Bolão Copa 2026<br>
+  Prêmios sujeitos a regulamento · 1 pizza/mês por 12 meses, retirada no local · Sem custos para participar
+</footer>
+
+<div id="toast-container"></div>
+
+<script src="js/supabase.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/matches.js"></script>
+<script src="js/ranking.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/coupons.js"></script>
+<script>
+function mainTab(btn, tabId) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  ['tab-jogos','tab-ranking','tab-cupons'].forEach(id => {
+    document.getElementById(id).style.display = id === tabId ? '' : 'none';
+  });
+  if (tabId === 'tab-ranking') loadRanking('ranking-container');
+  if (tabId === 'tab-cupons')  loadMyCoupons('coupons-container');
+}
+
+async function init() {
+  const session = getSession();
+  await loadMatches();
+  if (session) await loadMyPredictions(session.id);
+  renderMatchList('match-list');
+  updateHeaderState();
+  if (session) {
+    document.getElementById('my-stats-section').style.display = '';
+    refreshMyStats();
+  }
+  checkPendingCTA();
+}
+
+function checkPendingCTA() {
+  const session = getSession();
+  const pending = getPending();
+  const cta = document.getElementById('palpitar-cta');
+  cta.style.display = (!session && pending.length > 0) ? '' : 'none';
+}
+
+setInterval(checkPendingCTA, 2000);
+init();
+</script>
+</body>
+</html>
