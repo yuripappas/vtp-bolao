@@ -32,6 +32,11 @@
   </div>
 </div>
 
+<!-- BANNER CAROUSEL (gerenciado pelo admin) -->
+<div id="banner-carousel">
+  <!-- carregado via banners.js -->
+</div>
+
 <!-- COMO PONTUAR -->
 <div class="points-strip">
   <div class="points-grid">
@@ -59,13 +64,13 @@
   <div class="coupons-strip-inner">
     <div class="coupons-eyebrow">Cupons de desconto por placares exatos</div>
     <div class="coupons-tiers">
-      <div class="coupon-tier">1 cravada → <strong>10%</strong></div>
-      <div class="coupon-tier">2 → <strong>20%</strong></div>
-      <div class="coupon-tier">3 → <strong>30%</strong></div>
-      <div class="coupon-tier">4 → <strong>40%</strong></div>
-      <div class="coupon-tier max">5+ → <strong>50% máximo</strong></div>
+      <div class="coupon-tier">1 cravada → <strong>VAITERCOPA10</strong> (10%)</div>
+      <div class="coupon-tier">2 → <strong>VAITERGOL20</strong> (20%)</div>
+      <div class="coupon-tier">3 → <strong>VAITERJOGO30</strong> (30%)</div>
+      <div class="coupon-tier">4 → <strong>VAITERTIME40</strong> (40%)</div>
+      <div class="coupon-tier max">5+ → <strong>VAITERSORTE50</strong> (50%)</div>
     </div>
-    <div class="coupons-footnote">Não acumulativo com outras promoções · Brasil (placar exato) = R$30 fixo · Retirada no local</div>
+    <div class="coupons-footnote">Brasil (placar exato) = cupom <strong style="color:var(--brand-yellow)">VAIBRASIL</strong> — R$30 fixo · Não acumulativo · Retirada no local</div>
   </div>
 </div>
 
@@ -137,6 +142,7 @@
 
 <script src="js/supabase.js"></script>
 <script src="js/utils.js"></script>
+<script src="js/banners.js"></script>
 <script src="js/matches.js"></script>
 <script src="js/ranking.js"></script>
 <script src="js/auth.js"></script>
@@ -154,6 +160,7 @@ function mainTab(btn, tabId) {
 
 async function init() {
   const session = getSession();
+  loadBanners(); // carrega banners em paralelo
   await loadMatches();
   if (session) await loadMyPredictions(session.id);
   renderMatchList('match-list');

@@ -41,7 +41,7 @@ function adminLogin() {
 async function showAdminPanel() {
   document.getElementById('admin-content').innerHTML = `
     <div class="container" style="padding-top:24px;padding-bottom:48px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
         <h1 style="font-size:22px;font-weight:800">Bolão Copa — Admin</h1>
         <button class="btn btn-ghost btn-sm" onclick="showAddMatchModal()">+ Novo jogo</button>
       </div>
@@ -49,10 +49,12 @@ async function showAdminPanel() {
         <button class="tab active" onclick="adminTab(this,'tab-matches')">Jogos</button>
         <button class="tab" onclick="adminTab(this,'tab-ranking')">Ranking</button>
         <button class="tab" onclick="adminTab(this,'tab-coupons')">Cupons</button>
+        <button class="tab" onclick="adminTab(this,'tab-banners')">Banners</button>
       </div>
       <div id="tab-matches"></div>
       <div id="tab-ranking"  style="display:none"></div>
       <div id="tab-coupons"  style="display:none"></div>
+      <div id="tab-banners"  style="display:none"></div>
     </div>`;
   await adminLoadMatches();
 }
@@ -64,6 +66,7 @@ function adminTab(btn, tabId) {
   document.getElementById(tabId).style.display = '';
   if (tabId === 'tab-ranking') adminLoadRanking();
   if (tabId === 'tab-coupons') adminLoadCoupons();
+  if (tabId === 'tab-banners') adminLoadBanners();
 }
 
 async function adminLoadMatches() {

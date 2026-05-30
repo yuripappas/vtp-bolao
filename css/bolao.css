@@ -686,6 +686,123 @@ body {
 }
 .site-footer strong { color: var(--accent); }
 
+/* ── BANNER CAROUSEL ─────────────────────────────────────────── */
+.bc-wrap {
+  position: relative;
+  overflow: hidden;
+  background: var(--brand-purple);
+}
+.bc-slides { display: block; }
+.bc-slide {
+  display: none;
+  padding: var(--space-8) var(--space-6);
+  animation: bcFade var(--dur-base) var(--ease-out);
+}
+.bc-slide.active { display: flex; justify-content: center; }
+@keyframes bcFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.bc-inner {
+  max-width: 860px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+.bc-emoji {
+  font-size: 52px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.25));
+  line-height: 1;
+}
+.bc-body { flex: 1; min-width: 0; }
+.bc-title {
+  font-size: clamp(var(--text-lg), 3vw, var(--text-2xl));
+  font-weight: var(--weight-extrabold);
+  color: #fff;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+.bc-sub {
+  font-size: var(--text-sm);
+  color: rgba(255,255,255,.78);
+  margin-top: var(--space-1);
+  line-height: var(--leading-normal);
+}
+.bc-cta {
+  flex-shrink: 0;
+  background: rgba(255,255,255,.18);
+  border: 1.5px solid rgba(255,255,255,.35);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 10px var(--space-5);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.bc-cta:hover { background: rgba(255,255,255,.3); }
+
+/* dots */
+.bc-dots {
+  position: absolute;
+  bottom: var(--space-3);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.bc-dot {
+  height: 6px;
+  width: 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255,255,255,.35);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+.bc-dot.active { width: 20px; background: #fff; }
+
+/* arrows */
+.bc-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,.15);
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--dur-fast) var(--ease-out);
+  line-height: 1;
+}
+.bc-arrow:hover { background: rgba(255,255,255,.3); }
+.bc-prev { left: var(--space-3); }
+.bc-next { right: var(--space-3); }
+
+/* ── CUPOM CARD (atualizado com código destacado) ────────────── */
+.coupon-code-big {
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-extrabold);
+  letter-spacing: 3px;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 2px;
+}
+.coupon-card.fixed .coupon-code-big { color: var(--success-fg); }
+
 /* ── RESPONSIVE ──────────────────────────────────────────────── */
 @media (max-width: 480px) {
   .hero { padding: var(--space-8) var(--space-4) var(--space-12); }
@@ -693,4 +810,9 @@ body {
   .stat-val { font-size: var(--text-xl); }
   .points-grid { grid-template-columns: repeat(2, 1fr); }
   .modal { padding: var(--space-6) var(--space-4) var(--space-10); }
+  .bc-slide { padding: var(--space-6) var(--space-4) var(--space-10); }
+  .bc-inner { flex-direction: column; text-align: center; gap: var(--space-3); }
+  .bc-emoji { font-size: 40px; }
+  .bc-cta { width: 100%; justify-content: center; display: flex; }
+  .bc-arrow { display: none; }
 }

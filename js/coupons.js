@@ -25,19 +25,18 @@ async function loadMyCoupons(containerId) {
     el.innerHTML = coupons.map(c => {
       const redeemed = !!c.redeemed_at;
       const isFixed  = c.type === 'fixed';
-      const value    = isFixed ? `R$${Number(c.discount_brl).toFixed(0)}` : `${c.discount_pct}%`;
-      const desc     = isFixed
-        ? `Desconto fixo — Placar exato jogo do Brasil`
-        : `${c.discount_pct}% de desconto na sua próxima pizza`;
+      const value    = isFixed ? `R$${Number(c.discount_brl).toFixed(0)} off` : `${c.discount_pct}% off`;
+      const match    = c.bolao_matches;
+      const matchStr = match ? `${match.home_team} x ${match.away_team}` : '';
       return `
         <div class="coupon-card ${redeemed ? 'redeemed' : ''} ${isFixed ? 'fixed' : ''}">
           <div class="coupon-value">${value}</div>
           <div class="coupon-info">
-            <div class="coupon-code">${c.code}</div>
-            <div class="coupon-desc">${desc}</div>
+            <div class="coupon-code-big">${c.code}</div>
+            <div class="coupon-desc">${matchStr ? `Placar exato: ${matchStr}` : ''}</div>
             ${redeemed
-              ? `<div style="font-size:11px;color:var(--gray-500);margin-top:4px">Resgatado em ${fmtDate(c.redeemed_at)}</div>`
-              : `<div style="font-size:11px;color:var(--green);font-weight:600;margin-top:4px">Disponível — apresente na pizzaria</div>`
+              ? `<div style="font-size:var(--text-xs);color:var(--fg-subtle);margin-top:var(--space-1)">Resgatado em ${fmtDate(c.redeemed_at)}</div>`
+              : `<div style="font-size:var(--text-xs);color:var(--success-fg);font-weight:var(--weight-semibold);margin-top:var(--space-1)">Disponível — apresente na pizzaria</div>`
             }
           </div>
         </div>`;
