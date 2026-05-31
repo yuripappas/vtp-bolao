@@ -280,8 +280,8 @@ async function saveHeroImage() {
     await upsertConfig('hero_image_url', url);
     toast('Hero atualizado!', 'ok');
     adminLoadBanners();
-  } catch (_) {
-    toast('Erro ao salvar hero. Verifique se o bucket "banners" existe.', 'err');
+  } catch (e) {
+    toast('Erro: ' + (e.message || 'falha desconhecida'), 'err');
     if (btn) { btn.disabled = false; btn.textContent = 'Salvar hero'; }
   }
 }
