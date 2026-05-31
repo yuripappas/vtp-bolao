@@ -42,16 +42,32 @@ function fmtDate(iso) {
   return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 }
 
+// Milestones: 5 / 12 / 20 / 30 / 45 cravadas = 10/20/30/40/50%
+const COUPON_MILESTONES = [
+  { at: 45, pct: 50, level: 'Campeão',  icon: '🏆' },
+  { at: 30, pct: 40, level: 'Lendário', icon: '💎' },
+  { at: 20, pct: 30, level: 'Fera',     icon: '🔥' },
+  { at: 12, pct: 20, level: 'Craque',   icon: '⭐' },
+  { at:  5, pct: 10, level: 'Estreante',icon: '🏅' },
+];
+
 function couponPct(exactCount) {
-  if (exactCount >= 5) return 50;
-  if (exactCount === 4) return 40;
-  if (exactCount === 3) return 30;
-  if (exactCount === 2) return 20;
-  return 10;
+  for (const m of COUPON_MILESTONES) {
+    if (exactCount >= m.at) return m.pct;
+  }
+  return 0;
+}
+
+function nextMilestone(exactCount) {
+  for (let i = COUPON_MILESTONES.length - 1; i >= 0; i--) {
+    if (exactCount < COUPON_MILESTONES[i].at) return COUPON_MILESTONES[i];
+  }
+  return null; // já atingiu tudo
 }
 
 function nextCouponPct(exactCount) {
-  return couponPct(exactCount + 1);
+  const m = nextMilestone(exactCount);
+  return m ? m.pct : 50;
 }
 
 // Guarda participante na sessão (localStorage)

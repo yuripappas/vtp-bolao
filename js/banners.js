@@ -20,20 +20,28 @@ async function loadBanners() {
   }
 }
 
+function renderBannerSlideContent(b) {
+  if (b.image_url) {
+    return `<img src="${b.image_url}" alt="${b.title || 'Banner'}"
+      style="width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit">`;
+  }
+  return `<div class="bc-inner">
+    <div class="bc-emoji">${b.emoji || '⚽'}</div>
+    <div class="bc-body">
+      <div class="bc-title">${b.title}</div>
+      ${b.subtitle ? `<div class="bc-sub">${b.subtitle}</div>` : ''}
+    </div>
+    ${b.cta_text ? `<button class="bc-cta">${b.cta_text}</button>` : ''}
+  </div>`;
+}
+
 function renderCarousel(el) {
   el.innerHTML = `
     <div class="bc-wrap">
       <div class="bc-slides" id="bc-slides">
         ${_banners.map((b, i) => `
-          <div class="bc-slide ${i === 0 ? 'active' : ''}" style="background:${b.bg_gradient}" data-i="${i}">
-            <div class="bc-inner">
-              <div class="bc-emoji">${b.emoji || '⚽'}</div>
-              <div class="bc-body">
-                <div class="bc-title">${b.title}</div>
-                ${b.subtitle ? `<div class="bc-sub">${b.subtitle}</div>` : ''}
-              </div>
-              ${b.cta_text ? `<button class="bc-cta">${b.cta_text}</button>` : ''}
-            </div>
+          <div class="bc-slide ${i === 0 ? 'active' : ''}" style="${b.image_url ? '' : `background:${b.bg_gradient}`}" data-i="${i}">
+            ${renderBannerSlideContent(b)}
           </div>`).join('')}
       </div>
 
@@ -92,7 +100,13 @@ async function adminLoadBanners() {
   if (!el) return;
   el.innerHTML = `<div style="color:var(--fg-subtle);padding:var(--space-4);font-size:var(--text-sm)">Carregando...</div>`;
 
-  const rows = await db.get('bolao_banners', { select: '*', order: 'display_order.asc' });
+  let rows;
+  try {
+    rows = await db.get('bolao_banners', { select: '*', order: 'display_order.asc' });
+  } catch (_) {
+    el.innerHTML = `<div style="color:var(--danger-fg);padding:var(--space-4);font-size:var(--text-sm)">Tabela de banners não encontrada. Execute o SQL de criação no Supabase primeiro.</div>`;
+    return;
+  }
 
   el.innerHTML = `
     <div style="display:flex;justify-content:flex-end;margin-bottom:var(--space-4)">
@@ -102,13 +116,17 @@ async function adminLoadBanners() {
       ? `<p style="color:var(--fg-subtle);font-size:var(--text-sm)">Nenhum banner cadastrado.</p>`
       : rows.map(b => `
           <div class="card" style="margin-bottom:var(--space-3);overflow:hidden">
-            <div style="background:${b.bg_gradient};padding:var(--space-5);border-radius:var(--radius-lg);margin-bottom:var(--space-4);display:flex;align-items:center;gap:var(--space-4)">
-              <div style="font-size:36px;flex-shrink:0">${b.emoji || '⚽'}</div>
-              <div style="flex:1">
-                <div style="font-size:var(--text-lg);font-weight:var(--weight-extrabold);color:#fff;line-height:var(--leading-tight)">${b.title}</div>
-                ${b.subtitle ? `<div style="font-size:var(--text-sm);color:rgba(255,255,255,.75);margin-top:4px">${b.subtitle}</div>` : ''}
-              </div>
-              ${b.cta_text ? `<div style="background:rgba(255,255,255,.2);color:#fff;border-radius:var(--radius-lg);padding:8px 16px;font-size:var(--text-sm);font-weight:var(--weight-semibold);white-space:nowrap">${b.cta_text}</div>` : ''}
+            <div style="${b.image_url ? 'background:#000' : `background:${b.bg_gradient}`};border-radius:var(--radius-lg);margin-bottom:var(--space-4);overflow:hidden;min-height:80px">
+              ${b.image_url
+                ? `<img src="${b.image_url}" alt="${b.title}" style="width:100%;max-height:120px;object-fit:cover;display:block">`
+                : `<div style="padding:var(--space-5);display:flex;align-items:center;gap:var(--space-4)">
+                    <div style="font-size:36px;flex-shrink:0">${b.emoji || '⚽'}</div>
+                    <div style="flex:1">
+                      <div style="font-size:var(--text-lg);font-weight:var(--weight-extrabold);color:#fff;line-height:var(--leading-tight)">${b.title}</div>
+                      ${b.subtitle ? `<div style="font-size:var(--text-sm);color:rgba(255,255,255,.75);margin-top:4px">${b.subtitle}</div>` : ''}
+                    </div>
+                    ${b.cta_text ? `<div style="background:rgba(255,255,255,.2);color:#fff;border-radius:var(--radius-lg);padding:8px 16px;font-size:var(--text-sm);font-weight:var(--weight-semibold);white-space:nowrap">${b.cta_text}</div>` : ''}
+                  </div>`}
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap">
               <div style="display:flex;align-items:center;gap:var(--space-3)">
@@ -126,7 +144,7 @@ async function adminLoadBanners() {
 
 function showAddBannerModal(existing) {
   const editing = !!existing;
-  const b = existing || { title:'', subtitle:'', cta_text:'', bg_gradient: GRADIENTS[0].val, emoji:'⚽', is_active:true, display_order:0 };
+  const b = existing || { title:'', subtitle:'', cta_text:'', bg_gradient: GRADIENTS[0].val, emoji:'⚽', image_url:'', is_active:true, display_order:0 };
 
   const el = document.createElement('div');
   el.className = 'overlay';
@@ -136,33 +154,41 @@ function showAddBannerModal(existing) {
       <div class="modal-title">${editing ? 'Editar banner' : 'Novo banner'}</div>
 
       <div class="field">
-        <label>Título</label>
-        <input class="inp" id="bm-title" value="${b.title}" placeholder="Ex: Crave o placar, ganhe desconto!">
+        <label>URL da imagem (PNG/JPG) <span style="font-weight:400;color:var(--fg-subtle)">(opcional — substitui gradiente)</span></label>
+        <input class="inp" id="bm-imgurl" value="${b.image_url || ''}" placeholder="https://...imagem.jpg"
+          oninput="toggleGradientSection()">
       </div>
-      <div class="field">
-        <label>Subtítulo <span style="font-weight:400;color:var(--fg-subtle)">(opcional)</span></label>
-        <input class="inp" id="bm-sub" value="${b.subtitle || ''}" placeholder="Descrição complementar">
-      </div>
-      <div class="field">
-        <label>Emoji decorativo</label>
-        <input class="inp" id="bm-emoji" value="${b.emoji || '⚽'}" placeholder="⚽" style="font-size:24px;width:80px">
-      </div>
-      <div class="field">
-        <label>Texto do botão <span style="font-weight:400;color:var(--fg-subtle)">(opcional)</span></label>
-        <input class="inp" id="bm-cta" value="${b.cta_text || ''}" placeholder="Ex: Palpitar agora">
-      </div>
-      <div class="field">
-        <label>Gradiente de fundo</label>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2);margin-top:var(--space-1)">
-          ${GRADIENTS.map((g, i) => `
-            <button class="grad-opt ${b.bg_gradient === g.val ? 'selected' : ''}"
-              onclick="selectGrad(this,'${g.val.replace(/'/g, "\\'")}')"
-              style="background:${g.val};height:48px;border-radius:var(--radius-md);border:2px solid ${b.bg_gradient === g.val ? '#fff' : 'transparent'};cursor:pointer;font-size:var(--text-xs);color:#fff;font-weight:var(--weight-semibold);outline:none">
-              ${g.label}
-            </button>`).join('')}
+      <div id="bm-gradient-section">
+        <div class="field">
+          <label>Título</label>
+          <input class="inp" id="bm-title" value="${b.title}" placeholder="Ex: Crave o placar, ganhe desconto!">
         </div>
-        <input type="hidden" id="bm-gradient" value="${b.bg_gradient}">
-      </div>
+        <div class="field">
+          <label>Subtítulo <span style="font-weight:400;color:var(--fg-subtle)">(opcional)</span></label>
+          <input class="inp" id="bm-sub" value="${b.subtitle || ''}" placeholder="Descrição complementar">
+        </div>
+        <div class="field">
+          <label>Emoji decorativo</label>
+          <input class="inp" id="bm-emoji" value="${b.emoji || '⚽'}" placeholder="⚽" style="font-size:24px;width:80px">
+        </div>
+        <div class="field">
+          <label>Texto do botão <span style="font-weight:400;color:var(--fg-subtle)">(opcional)</span></label>
+          <input class="inp" id="bm-cta" value="${b.cta_text || ''}" placeholder="Ex: Palpitar agora">
+        </div>
+        <div class="field">
+          <label>Gradiente de fundo</label>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2);margin-top:var(--space-1)">
+            ${GRADIENTS.map((g, i) => `
+              <button class="grad-opt ${b.bg_gradient === g.val ? 'selected' : ''}"
+                onclick="selectGrad(this,'${g.val.replace(/'/g, "\\'")}')"
+                style="background:${g.val};height:48px;border-radius:var(--radius-md);border:2px solid ${b.bg_gradient === g.val ? '#fff' : 'transparent'};cursor:pointer;font-size:var(--text-xs);color:#fff;font-weight:var(--weight-semibold);outline:none">
+                ${g.label}
+              </button>`).join('')}
+          </div>
+          <input type="hidden" id="bm-gradient" value="${b.bg_gradient}">
+        </div>
+      </div><!-- /bm-gradient-section -->
+
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
         <div class="field">
           <label>Ordem</label>
@@ -177,19 +203,6 @@ function showAddBannerModal(existing) {
         </div>
       </div>
 
-      <!-- Preview -->
-      <div style="margin-bottom:var(--space-4)">
-        <label style="font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--fg-muted);display:block;margin-bottom:var(--space-2)">Preview</label>
-        <div id="bm-preview" style="background:${b.bg_gradient};border-radius:var(--radius-lg);padding:var(--space-5);display:flex;align-items:center;gap:var(--space-4)">
-          <div id="bm-prev-emoji" style="font-size:36px">${b.emoji || '⚽'}</div>
-          <div style="flex:1">
-            <div id="bm-prev-title" style="font-weight:var(--weight-extrabold);color:#fff;font-size:var(--text-lg)">${b.title || 'Título do banner'}</div>
-            <div id="bm-prev-sub"   style="color:rgba(255,255,255,.75);font-size:var(--text-sm);margin-top:2px">${b.subtitle || ''}</div>
-          </div>
-          <div id="bm-prev-cta" style="background:rgba(255,255,255,.2);color:#fff;border-radius:var(--radius-lg);padding:8px 16px;font-size:var(--text-sm);font-weight:var(--weight-semibold);${b.cta_text ? '' : 'display:none'}">${b.cta_text || ''}</div>
-        </div>
-      </div>
-
       <button class="btn btn-primary" onclick="submitBanner('${editing ? b.id : ''}')">
         ${editing ? 'Salvar alterações' : 'Adicionar banner'}
       </button>
@@ -197,24 +210,19 @@ function showAddBannerModal(existing) {
     </div>`;
   document.body.appendChild(el);
 
-  // Live preview
-  const sync = () => {
-    document.getElementById('bm-prev-title').textContent = document.getElementById('bm-title').value || 'Título do banner';
-    document.getElementById('bm-prev-sub').textContent   = document.getElementById('bm-sub').value;
-    const cta = document.getElementById('bm-cta').value;
-    const ctaEl = document.getElementById('bm-prev-cta');
-    ctaEl.textContent = cta; ctaEl.style.display = cta ? '' : 'none';
-    document.getElementById('bm-prev-emoji').textContent = document.getElementById('bm-emoji').value || '⚽';
-  };
-  ['bm-title','bm-sub','bm-cta','bm-emoji'].forEach(id =>
-    document.getElementById(id).addEventListener('input', sync));
+  toggleGradientSection();
+}
+
+function toggleGradientSection() {
+  const imgUrl = document.getElementById('bm-imgurl')?.value?.trim();
+  const section = document.getElementById('bm-gradient-section');
+  if (section) section.style.display = imgUrl ? 'none' : '';
 }
 
 function selectGrad(btn, val) {
   document.querySelectorAll('.grad-opt').forEach(b => b.style.borderColor = 'transparent');
   btn.style.borderColor = '#fff';
   document.getElementById('bm-gradient').value = val;
-  document.getElementById('bm-preview').style.background = val;
 }
 
 async function showEditBannerModal(id) {
@@ -224,18 +232,22 @@ async function showEditBannerModal(id) {
 }
 
 async function submitBanner(editId) {
-  const title    = document.getElementById('bm-title').value.trim();
-  const subtitle = document.getElementById('bm-sub').value.trim();
-  const cta_text = document.getElementById('bm-cta').value.trim();
-  const emoji    = document.getElementById('bm-emoji').value.trim();
-  const gradient = document.getElementById('bm-gradient').value;
+  const image_url = document.getElementById('bm-imgurl')?.value?.trim() || null;
+  const title    = document.getElementById('bm-title')?.value?.trim() || '';
+  const subtitle = document.getElementById('bm-sub')?.value?.trim() || '';
+  const cta_text = document.getElementById('bm-cta')?.value?.trim() || '';
+  const emoji    = document.getElementById('bm-emoji')?.value?.trim() || '⚽';
+  const gradient = document.getElementById('bm-gradient')?.value || GRADIENTS[0].val;
   const order    = parseInt(document.getElementById('bm-order').value) || 0;
   const active   = document.getElementById('bm-active').value === 'true';
 
-  if (!title) return toast('Informe o título do banner', 'warn');
+  if (!image_url && !title) return toast('Informe a URL da imagem ou um título para o banner', 'warn');
 
-  const payload = { title, subtitle: subtitle || null, cta_text: cta_text || null,
-                    emoji, bg_gradient: gradient, display_order: order, is_active: active };
+  const payload = {
+    title: title || '', subtitle: subtitle || null, cta_text: cta_text || null,
+    emoji, bg_gradient: gradient, image_url: image_url || null,
+    display_order: order, is_active: active
+  };
 
   try {
     if (editId) {

@@ -78,32 +78,38 @@ function renderCouponProgress(exactCount) {
   const el = document.getElementById('coupon-progress');
   if (!el) return;
 
-  const steps = [
-    { count: 1, pct: '10%' },
-    { count: 2, pct: '20%' },
-    { count: 3, pct: '30%' },
-    { count: 4, pct: '40%' },
-    { count: 5, pct: '50%' }
-  ];
+  const currentPct = couponPct(exactCount);
+  const next       = nextMilestone(exactCount);
 
   el.innerHTML = `
-    <div class="coupon-progress">
-      <div class="progress-title">Desconto progressivo por placares exatos</div>
-      <div class="progress-steps">
-        ${steps.map(s => {
-          const done   = exactCount >= s.count;
-          const active = exactCount === s.count - 1;
-          return `<div class="prog-step">
-            <div class="prog-dot ${done ? 'done' : active ? 'active' : ''}">${s.pct}</div>
-            <div class="prog-label ${done ? 'done' : ''}">${s.count} acerto${s.count > 1 ? 's' : ''}</div>
+    <div class="milestone-progress">
+      <div class="milestone-header">
+        <span class="milestone-label">Seu nível atual</span>
+        <span class="milestone-pct">${currentPct > 0 ? currentPct + '% de desconto desbloqueado' : 'Nenhum nível atingido ainda'}</span>
+      </div>
+      <div class="milestone-levels">
+        ${COUPON_MILESTONES.slice().reverse().map(m => {
+          const done    = exactCount >= m.at;
+          const isCurr  = currentPct === m.pct && done;
+          return `<div class="milestone-level ${done ? 'done' : ''} ${isCurr ? 'current' : ''}">
+            <div class="ml-icon">${m.icon}</div>
+            <div class="ml-body">
+              <div class="ml-name">${m.level}</div>
+              <div class="ml-goal">${m.at} placares exatos</div>
+            </div>
+            <div class="ml-reward">${m.pct}% off</div>
+            ${done ? '<div class="ml-badge">✓</div>' : ''}
           </div>`;
         }).join('')}
       </div>
-      ${exactCount >= 5
-        ? `<p style="text-align:center;font-size:12px;color:var(--green);font-weight:700;margin-top:12px">Parabéns! Você atingiu o desconto máximo de 50%!</p>`
-        : `<p style="text-align:center;font-size:12px;color:var(--gray-500);margin-top:12px">
-            Próximo cupom: <strong>${nextCouponPct(exactCount)}% de desconto</strong> no ${exactCount + 1}º placar exato
-           </p>`
+      ${next
+        ? `<div class="milestone-next">
+            Faltam <strong>${next.at - exactCount}</strong> placar${next.at - exactCount > 1 ? 'es' : ''} exato${next.at - exactCount > 1 ? 's' : ''} para desbloquear
+            <strong>${next.icon} ${next.level} (${next.pct}% off)</strong>
+           </div>`
+        : `<div class="milestone-next" style="color:var(--brand-orange);font-weight:var(--weight-bold)">
+            Parabéns! Você atingiu o nível máximo — 50% de desconto!
+           </div>`
       }
     </div>`;
 }

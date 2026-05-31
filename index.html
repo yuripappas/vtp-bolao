@@ -7,58 +7,59 @@
   <meta name="description" content="Faça seus palpites, acumule pontos e concorra a 1 ano de pizza grátis!">
   <link rel="stylesheet" href="css/bolao.css">
   <style>
-    /* ── Dark theme VTP ──────────────────────────────────────────── */
+    /* ── VTP Purple Dark Theme ───────────────────────────────────── */
     :root {
-      --bg:                #0A0318;
-      --bg-subtle:         #130726;
-      --bg-elevated:       #160835;
-      --bg-inverse:        #07010F;
-      --fg:                #EDE8FF;
-      --fg-muted:          rgba(237,232,255,.65);
-      --fg-subtle:         rgba(237,232,255,.38);
-      --fg-inverse:        #0A0318;
-      --border:            rgba(255,255,255,.10);
-      --border-strong:     rgba(255,255,255,.18);
-      --card-bg:           #1E0B42;
-      --card-border:       rgba(255,255,255,.13);
-      --card-border-hover: rgba(245,168,0,.35);
-      --card-warm-bg:      #1E1000;
-      --card-warm-border:  rgba(245,168,0,.25);
-      --input-bg:          #130726;
-      --input-border:      rgba(255,255,255,.14);
-      --input-border-hover:rgba(245,168,0,.45);
+      --bg:                #180940;
+      --bg-subtle:         #20104E;
+      --bg-elevated:       #27155E;
+      --bg-inverse:        #0F0630;
+      --fg:                #F0EBFF;
+      --fg-muted:          rgba(240,235,255,.70);
+      --fg-subtle:         rgba(240,235,255,.42);
+      --fg-inverse:        #180940;
+      --border:            rgba(255,255,255,.13);
+      --border-strong:     rgba(255,255,255,.22);
+      --card-bg:           #2D1868;
+      --card-border:       rgba(255,255,255,.15);
+      --card-border-hover: rgba(245,168,0,.45);
+      --card-warm-bg:      #2A1500;
+      --card-warm-border:  rgba(245,168,0,.30);
+      --input-bg:          #20104E;
+      --input-border:      rgba(255,255,255,.20);
+      --input-border-hover:rgba(245,168,0,.55);
       --input-border-focus:#F5A800;
-      --input-fg:          #EDE8FF;
-      --input-placeholder: rgba(237,232,255,.28);
-      --focus-ring:        rgba(245,168,0,.20);
+      --input-fg:          #F0EBFF;
+      --input-placeholder: rgba(240,235,255,.32);
+      --focus-ring:        rgba(245,168,0,.25);
       --accent:            #F5A800;
-      --accent-subtle:     rgba(245,168,0,.10);
-      --modal-bg:          #190A33;
-      --modal-overlay:     rgba(5,0,15,.92);
+      --accent-subtle:     rgba(245,168,0,.14);
+      --modal-bg:          #2D1868;
+      --modal-overlay:     rgba(12,5,40,.93);
       --modal-shadow:      0 25px 80px rgba(0,0,0,.70);
       --action-primary-bg:       #F5A800;
       --action-primary-fg:       #000;
       --action-primary-bg-hover: #D97706;
-      --success-bg:   rgba(74,222,128,.08);
-      --success-fg:   #4ADE80;
-      --success-border: rgba(74,222,128,.2);
-      --success-bg-bold: #166534;
-      --warning-bg:   rgba(245,168,0,.10);
-      --warning-fg:   #F5A800;
-      --warning-border: rgba(245,168,0,.2);
-      --danger-bg:    rgba(239,68,68,.10);
-      --danger-fg:    #F87171;
-      --danger-border: rgba(239,68,68,.2);
+      /* Sem verde — VTP usa orange/yellow em feedback */
+      --success-bg:     rgba(245,168,0,.12);
+      --success-fg:     #F5A800;
+      --success-border: rgba(245,168,0,.28);
+      --success-bg-bold:#92400E;
+      --warning-bg:     rgba(240,180,41,.12);
+      --warning-fg:     #F0B429;
+      --warning-border: rgba(240,180,41,.28);
+      --danger-bg:      rgba(239,68,68,.12);
+      --danger-fg:      #F87171;
+      --danger-border:  rgba(239,68,68,.22);
       --danger-bg-bold: #991B1B;
-      --info-bg:      rgba(107,33,212,.12);
-      --info-fg:      #A78BFA;
-      --info-border:  rgba(107,33,212,.2);
-      --shadow-xs: 0 1px 4px rgba(0,0,0,.35);
-      --shadow-sm: 0 2px 8px rgba(0,0,0,.45);
-      --shadow-md: 0 4px 20px rgba(0,0,0,.55);
-      --shadow-lg: 0 8px 32px rgba(0,0,0,.60);
-      --orange-bg:     rgba(245,168,0,.06);
-      --orange-border: rgba(245,168,0,.18);
+      --info-bg:        rgba(168,85,247,.14);
+      --info-fg:        #C084FC;
+      --info-border:    rgba(168,85,247,.25);
+      --shadow-xs: 0 1px 4px rgba(0,0,0,.50);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,.55);
+      --shadow-md: 0 4px 20px rgba(0,0,0,.60);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,.65);
+      --orange-bg:     rgba(245,168,0,.10);
+      --orange-border: rgba(245,168,0,.22);
     }
   </style>
 </head>
@@ -129,18 +130,43 @@
   </div>
 </div>
 
-<!-- CUPONS PROGRESSIVOS -->
+<!-- GAMIFICAÇÃO DE CUPONS -->
 <div class="coupons-strip">
   <div class="coupons-strip-inner">
-    <div class="coupons-eyebrow">Cupons de desconto por placares exatos</div>
+    <div class="coupons-eyebrow">🔒 Desbloqueie cupons exclusivos acertando placares</div>
     <div class="coupons-tiers">
-      <div class="coupon-tier">1 cravada → <strong>VAITERCOPA10</strong> (10%)</div>
-      <div class="coupon-tier">2 → <strong>VAITERGOL20</strong> (20%)</div>
-      <div class="coupon-tier">3 → <strong>VAITERJOGO30</strong> (30%)</div>
-      <div class="coupon-tier">4 → <strong>VAITERTIME40</strong> (40%)</div>
-      <div class="coupon-tier max">5+ → <strong>VAITERSORTE50</strong> (50%)</div>
+      <div class="coupon-tier">
+        <div class="tier-icon">🏅</div>
+        <div class="tier-name">Estreante</div>
+        <div class="tier-goal">5 cravadas</div>
+        <div class="tier-reward">10% off</div>
+      </div>
+      <div class="coupon-tier">
+        <div class="tier-icon">⭐</div>
+        <div class="tier-name">Craque</div>
+        <div class="tier-goal">12 cravadas</div>
+        <div class="tier-reward">20% off</div>
+      </div>
+      <div class="coupon-tier">
+        <div class="tier-icon">🔥</div>
+        <div class="tier-name">Fera</div>
+        <div class="tier-goal">20 cravadas</div>
+        <div class="tier-reward">30% off</div>
+      </div>
+      <div class="coupon-tier">
+        <div class="tier-icon">💎</div>
+        <div class="tier-name">Lendário</div>
+        <div class="tier-goal">30 cravadas</div>
+        <div class="tier-reward">40% off</div>
+      </div>
+      <div class="coupon-tier max">
+        <div class="tier-icon">🏆</div>
+        <div class="tier-name">Campeão</div>
+        <div class="tier-goal">45 cravadas</div>
+        <div class="tier-reward">50% off</div>
+      </div>
     </div>
-    <div class="coupons-footnote">Brasil (placar exato) = cupom <strong style="color:var(--brand-yellow)">VAIBRASIL</strong> — R$30 fixo · Não acumulativo · Retirada no local</div>
+    <div class="coupons-footnote">Jogo do Brasil (placar exato) = R$30 de desconto · Cada nível desbloqueia um cupom exclusivo na aba "Meus cupons"</div>
   </div>
 </div>
 
