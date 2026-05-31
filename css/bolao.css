@@ -2,6 +2,7 @@
 @import url('./tokens.css');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { overflow-x: hidden; }
 
 body {
   font-family: var(--font-sans);
@@ -386,7 +387,7 @@ body {
   gap: var(--space-3);
   margin-bottom: var(--space-5);
 }
-.team { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
+.team { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); min-width: 0; }
 .team-flag { font-size: 44px; line-height: 1; }
 .team-name {
   font-size: var(--text-sm);
@@ -399,8 +400,6 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 100%;
-  width: 0;
-  min-width: 100%;
 }
 .vs-block { text-align: center; }
 
