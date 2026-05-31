@@ -524,8 +524,8 @@ body {
 
 /* INVITE CARD */
 .invite-card {
-  background: linear-gradient(135deg, #0A3320 0%, #14532D 100%);
-  border: 1.5px solid rgba(74,222,128,.18);
+  background: var(--card-bg);
+  border: 1.5px solid var(--card-border);
   border-radius: var(--radius-xl);
   padding: var(--space-5);
   text-align: center;
