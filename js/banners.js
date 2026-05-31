@@ -328,7 +328,11 @@ async function uploadBannerImage(file) {
     headers: { 'apikey': BOLAO_KEY, 'Authorization': `Bearer ${BOLAO_KEY}`, 'Content-Type': file.type },
     body: file
   });
-  if (!r.ok) throw new Error('Erro no upload da imagem');
+  if (!r.ok) {
+    let msg = `HTTP ${r.status}`;
+    try { const j = await r.json(); msg = j.message || j.error || JSON.stringify(j); } catch (_) {}
+    throw new Error(msg);
+  }
   return `${BOLAO_URL}/storage/v1/object/public/banners/${name}`;
 }
 
