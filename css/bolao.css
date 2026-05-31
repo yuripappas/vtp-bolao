@@ -9,6 +9,7 @@ body {
   color: var(--fg);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* ── PROMO BAR (espaço de publicidade) ─────────────────────────── */
@@ -394,6 +395,12 @@ body {
   color: var(--fg);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  width: 0;
+  min-width: 100%;
 }
 .vs-block { text-align: center; }
 
@@ -660,8 +667,9 @@ body {
 .coupon-desc { font-size: var(--text-xs); color: var(--fg-muted); margin-top: 2px; }
 
 /* ── ADMIN TABS (kept for admin.html) ─────────────────────────────── */
-.tabs { display: flex; gap: 4px; background: var(--bg-subtle); border-radius: var(--radius-lg); padding: 4px; margin-bottom: var(--space-6); border: 1px solid var(--border); }
-.tab { flex: 1; padding: var(--space-2); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: var(--weight-semibold); border: none; background: transparent; color: var(--fg-muted); cursor: pointer; transition: all 150ms ease; font-family: var(--font-sans); min-height: var(--hit-target); }
+.tabs { display: flex; gap: 4px; background: var(--bg-subtle); border-radius: var(--radius-lg); padding: 4px; margin-bottom: var(--space-6); border: 1px solid var(--border); overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: 0 0 auto; padding: var(--space-2) var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: var(--weight-semibold); border: none; background: transparent; color: var(--fg-muted); cursor: pointer; transition: all 150ms ease; font-family: var(--font-sans); min-height: var(--hit-target); white-space: nowrap; }
 .tab.active { background: var(--bg-elevated); color: var(--fg); box-shadow: var(--shadow-sm); }
 
 /* ── BADGES ───────────────────────────────────────────────────────── */
@@ -744,9 +752,11 @@ body {
   .round-tab { padding: 8px var(--space-3); font-size: 13px; min-height: 40px; }
 
   /* Match cards: mais espaço para toque */
-  .match-card { padding: var(--space-4); }
+  .match-card { padding: var(--space-4); overflow: hidden; }
   .team-flag { font-size: 32px; }
-  .score-input { width: 52px; height: 52px; font-size: 20px; }
+  .score-input { width: 44px; height: 44px; font-size: 18px; }
+  .score-sep { font-size: 16px; }
+  .result-score { font-size: 32px; }
   .btn-palpitar { min-height: 48px; font-size: var(--text-sm); }
 
   /* Stats grid */
@@ -757,7 +767,7 @@ body {
   .modal { padding: var(--space-6) var(--space-4) var(--space-10); }
 
   /* Tabs: touch targets maiores */
-  .tab { min-height: 44px; font-size: var(--text-sm); padding: var(--space-2) var(--space-4); }
+  .tab { min-height: 44px; font-size: 13px; padding: var(--space-2) var(--space-3); }
 
   /* Sidebar card-title e regras visíveis se sidebar aparecer */
   .sidebar-card-title { gap: var(--space-2); }
