@@ -154,9 +154,16 @@ function showAddBannerModal(existing) {
       <div class="modal-title">${editing ? 'Editar banner' : 'Novo banner'}</div>
 
       <div class="field">
-        <label>URL da imagem (PNG/JPG) <span style="font-weight:400;color:var(--fg-subtle)">(opcional — substitui gradiente)</span></label>
-        <input class="inp" id="bm-imgurl" value="${b.image_url || ''}" placeholder="https://...imagem.jpg"
-          oninput="toggleGradientSection()">
+        <label>Imagem do banner <span style="font-weight:400;color:var(--fg-subtle)">(PNG/JPG — opcional, substitui gradiente)</span></label>
+        <input type="file" class="inp" id="bm-imgfile" accept="image/png,image/jpeg,image/webp"
+          style="padding:var(--space-2);cursor:pointer" onchange="previewBannerImage(this)">
+        ${b.image_url
+          ? `<div id="bm-imgpreview" style="margin-top:var(--space-2);border-radius:var(--radius-lg);overflow:hidden">
+               <img src="${b.image_url}" style="width:100%;max-height:100px;object-fit:cover;display:block">
+               <div style="font-size:var(--text-xs);color:var(--fg-subtle);margin-top:4px">Imagem atual — selecione um novo arquivo para substituir</div>
+             </div>`
+          : `<div id="bm-imgpreview" style="display:none"></div>`}
+        <input type="hidden" id="bm-imgurl" value="${b.image_url || ''}">
       </div>
       <div id="bm-gradient-section">
         <div class="field">
@@ -214,9 +221,33 @@ function showAddBannerModal(existing) {
 }
 
 function toggleGradientSection() {
-  const imgUrl = document.getElementById('bm-imgurl')?.value?.trim();
+  const hasImg = document.getElementById('bm-imgurl')?.value?.trim() ||
+                 document.getElementById('bm-imgfile')?.files?.length;
   const section = document.getElementById('bm-gradient-section');
-  if (section) section.style.display = imgUrl ? 'none' : '';
+  if (section) section.style.display = hasImg ? 'none' : '';
+}
+
+function previewBannerImage(input) {
+  const file = input.files[0];
+  const preview = document.getElementById('bm-imgpreview');
+  if (!file || !preview) return;
+  const url = URL.createObjectURL(file);
+  preview.style.display = '';
+  preview.innerHTML = `<img src="${url}" style="width:100%;max-height:100px;object-fit:cover;display:block;border-radius:var(--radius-lg)">`;
+  document.getElementById('bm-imgurl').value = '';
+  toggleGradientSection();
+}
+
+async function uploadBannerImage(file) {
+  const ext  = file.name.split('.').pop().toLowerCase();
+  const name = `banner-${Date.now()}.${ext}`;
+  const r = await fetch(`${BOLAO_URL}/storage/v1/object/banners/${name}`, {
+    method: 'POST',
+    headers: { 'apikey': BOLAO_KEY, 'Authorization': `Bearer ${BOLAO_KEY}`, 'Content-Type': file.type },
+    body: file
+  });
+  if (!r.ok) throw new Error('Erro no upload da imagem');
+  return `${BOLAO_URL}/storage/v1/object/public/banners/${name}`;
 }
 
 function selectGrad(btn, val) {
@@ -232,7 +263,9 @@ async function showEditBannerModal(id) {
 }
 
 async function submitBanner(editId) {
-  const image_url = document.getElementById('bm-imgurl')?.value?.trim() || null;
+  const fileInput = document.getElementById('bm-imgfile');
+  const file      = fileInput?.files?.[0];
+  let   image_url = document.getElementById('bm-imgurl')?.value?.trim() || null;
   const title    = document.getElementById('bm-title')?.value?.trim() || '';
   const subtitle = document.getElementById('bm-sub')?.value?.trim() || '';
   const cta_text = document.getElementById('bm-cta')?.value?.trim() || '';
@@ -241,7 +274,18 @@ async function submitBanner(editId) {
   const order    = parseInt(document.getElementById('bm-order').value) || 0;
   const active   = document.getElementById('bm-active').value === 'true';
 
-  if (!image_url && !title) return toast('Informe a URL da imagem ou um título para o banner', 'warn');
+  if (!file && !image_url && !title) return toast('Selecione uma imagem ou informe um título', 'warn');
+
+  const btn = document.querySelector('#banner-modal .btn-primary');
+  if (btn) { btn.disabled = true; btn.textContent = 'Salvando...'; }
+
+  try {
+    if (file) image_url = await uploadBannerImage(file);
+  } catch (_) {
+    toast('Erro ao fazer upload da imagem. Verifique se o bucket "banners" existe no Supabase Storage.', 'err');
+    if (btn) { btn.disabled = false; btn.textContent = editId ? 'Salvar alterações' : 'Adicionar banner'; }
+    return;
+  }
 
   const payload = {
     title: title || '', subtitle: subtitle || null, cta_text: cta_text || null,
@@ -261,6 +305,7 @@ async function submitBanner(editId) {
     adminLoadBanners();
   } catch (e) {
     toast('Erro ao salvar banner', 'err');
+    if (btn) { btn.disabled = false; btn.textContent = editId ? 'Salvar alterações' : 'Adicionar banner'; }
   }
 }
 
