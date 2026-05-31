@@ -92,7 +92,7 @@ function renderCouponProgress(exactCount) {
           const done    = exactCount >= m.at;
           const isCurr  = currentPct === m.pct && done;
           return `<div class="milestone-level ${done ? 'done' : ''} ${isCurr ? 'current' : ''}">
-            <div class="ml-icon">${m.icon}</div>
+            <div class="ml-icon">${lc(m.icon, 18, done ? 'var(--brand-orange)' : 'var(--fg-subtle)')}</div>
             <div class="ml-body">
               <div class="ml-name">${m.level}</div>
               <div class="ml-goal">${m.at} placares exatos</div>

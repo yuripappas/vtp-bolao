@@ -44,11 +44,11 @@ function fmtDate(iso) {
 
 // Milestones: 5 / 12 / 20 / 30 / 45 cravadas = 10/20/30/40/50%
 const COUPON_MILESTONES = [
-  { at: 45, pct: 50, level: 'Campeão',  icon: '🏆' },
-  { at: 30, pct: 40, level: 'Lendário', icon: '💎' },
-  { at: 20, pct: 30, level: 'Fera',     icon: '🔥' },
-  { at: 12, pct: 20, level: 'Craque',   icon: '⭐' },
-  { at:  5, pct: 10, level: 'Estreante',icon: '🏅' },
+  { at: 45, pct: 50, level: 'Campeão',  icon: 'trophy' },
+  { at: 30, pct: 40, level: 'Lendário', icon: 'zap' },
+  { at: 20, pct: 30, level: 'Fera',     icon: 'flame' },
+  { at: 12, pct: 20, level: 'Craque',   icon: 'star' },
+  { at:  5, pct: 10, level: 'Estreante',icon: 'award' },
 ];
 
 function couponPct(exactCount) {

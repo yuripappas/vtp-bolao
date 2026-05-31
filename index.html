@@ -39,7 +39,6 @@
       --action-primary-bg:       #F5A800;
       --action-primary-fg:       #000;
       --action-primary-bg-hover: #D97706;
-      /* Sem verde — VTP usa orange/yellow em feedback */
       --success-bg:     rgba(245,168,0,.12);
       --success-fg:     #F5A800;
       --success-border: rgba(245,168,0,.28);
@@ -65,28 +64,18 @@
 </head>
 <body>
 
-<!-- BARRA DE COMUNICAÇÃO (publicidade / avisos) -->
-<!-- Para editar: altere o texto entre as tags abaixo -->
-<div class="promo-bar" id="promo-bar">
-  🍕 <strong>Vai Ter Pizza!</strong> — Aberto todos os dias das 18h às 23h &nbsp;·&nbsp; Peça via WhatsApp ou Delivery
-  <button class="promo-bar-close" onclick="document.getElementById('promo-bar').remove()" aria-label="Fechar">×</button>
-</div>
-
 <!-- HEADER -->
 <header class="site-header">
   <div class="site-header-inner">
     <a href="/" class="site-logo">Vai Ter Pizza!</a>
     <div class="header-actions">
-      <span id="header-name" style="font-size:var(--text-sm);font-weight:var(--weight-semibold);color:var(--fg-muted)"></span>
-      <button id="header-register-btn" class="btn-whatsapp" style="min-height:36px;padding:8px var(--space-4);font-size:var(--text-sm)" onclick="showRegisterModal()">Cadastrar</button>
-      <button id="header-login-btn" class="btn-hero-ghost" style="min-height:36px;padding:8px var(--space-4);font-size:var(--text-sm)" onclick="showLoginModal()">Entrar</button>
-      <button id="header-logout-btn" class="btn-hero-ghost" style="display:none;min-height:36px;padding:8px var(--space-4);font-size:var(--text-sm)" onclick="logout()">Sair</button>
+      <span id="header-name" class="header-name"></span>
+      <button id="header-register-btn" class="btn-header-primary" onclick="showRegisterModal()">Cadastrar</button>
+      <button id="header-login-btn"    class="btn-header-ghost"   onclick="showLoginModal()">Entrar</button>
+      <button id="header-logout-btn"   class="btn-header-ghost"   style="display:none" onclick="logout()">Sair</button>
     </div>
   </div>
 </header>
-
-<!-- BANNER CAROUSEL (gerenciado pelo admin) -->
-<div id="banner-carousel"></div>
 
 <!-- HERO -->
 <div class="hero" id="hero-section">
@@ -94,7 +83,7 @@
   <h1>Palpite. Pontue.<br><em>Ganhe pizza.</em></h1>
   <p class="hero-sub">Acerte os placares, acumule pontos e concorra ao maior prêmio da Copa.</p>
   <div class="prize-badge">
-    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
     1º lugar: 1 pizza por mês durante 1 ano inteiro
   </div>
   <div class="hero-actions">
@@ -105,68 +94,6 @@
     <button class="btn-hero-ghost" onclick="showRegisterModal()">
       Participar grátis
     </button>
-  </div>
-</div>
-
-<!-- COMO PONTUAR -->
-<div class="points-strip">
-  <div class="points-grid">
-    <div class="points-item">
-      <div class="points-val">10pts</div>
-      <div class="points-label">Placar exato</div>
-    </div>
-    <div class="points-item">
-      <div class="points-val">7pts</div>
-      <div class="points-label">Saldo de gols</div>
-    </div>
-    <div class="points-item">
-      <div class="points-val">5pts</div>
-      <div class="points-label">Vencedor certo</div>
-    </div>
-    <div class="points-item brazil-bonus">
-      <div class="points-val">×3</div>
-      <div class="points-label">Jogos do Brasil + R$30 no placar exato</div>
-    </div>
-  </div>
-</div>
-
-<!-- GAMIFICAÇÃO DE CUPONS -->
-<div class="coupons-strip">
-  <div class="coupons-strip-inner">
-    <div class="coupons-eyebrow">🔒 Desbloqueie cupons exclusivos acertando placares</div>
-    <div class="coupons-tiers">
-      <div class="coupon-tier">
-        <div class="tier-icon">🏅</div>
-        <div class="tier-name">Estreante</div>
-        <div class="tier-goal">5 cravadas</div>
-        <div class="tier-reward">10% off</div>
-      </div>
-      <div class="coupon-tier">
-        <div class="tier-icon">⭐</div>
-        <div class="tier-name">Craque</div>
-        <div class="tier-goal">12 cravadas</div>
-        <div class="tier-reward">20% off</div>
-      </div>
-      <div class="coupon-tier">
-        <div class="tier-icon">🔥</div>
-        <div class="tier-name">Fera</div>
-        <div class="tier-goal">20 cravadas</div>
-        <div class="tier-reward">30% off</div>
-      </div>
-      <div class="coupon-tier">
-        <div class="tier-icon">💎</div>
-        <div class="tier-name">Lendário</div>
-        <div class="tier-goal">30 cravadas</div>
-        <div class="tier-reward">40% off</div>
-      </div>
-      <div class="coupon-tier max">
-        <div class="tier-icon">🏆</div>
-        <div class="tier-name">Campeão</div>
-        <div class="tier-goal">45 cravadas</div>
-        <div class="tier-reward">50% off</div>
-      </div>
-    </div>
-    <div class="coupons-footnote">Jogo do Brasil (placar exato) = R$30 de desconto · Cada nível desbloqueia um cupom exclusivo na aba "Meus cupons"</div>
   </div>
 </div>
 
@@ -191,15 +118,15 @@
               <div class="stat-label">Cravadas</div>
             </div>
             <div class="stat-card">
-              <div class="stat-val" id="stat-coupon">10%</div>
-              <div class="stat-label">Próx. cupom</div>
+              <div class="stat-val" id="stat-coupon">—</div>
+              <div class="stat-label">Desconto atual</div>
             </div>
           </div>
           <div id="coupon-progress"></div>
         </div>
       </div>
 
-      <!-- TABS DE ABA (jogos / cupons / ranking mobile) -->
+      <!-- TABS PRINCIPAIS -->
       <div class="tabs" style="margin-bottom:var(--space-5)">
         <button class="tab active" onclick="mainTab(this,'tab-jogos')">Jogos</button>
         <button class="tab" onclick="mainTab(this,'tab-cupons')">Meus cupons</button>
@@ -208,10 +135,9 @@
 
       <!-- ABA JOGOS -->
       <div id="tab-jogos">
-        <!-- FILTROS POR FASE -->
         <div class="round-filters" id="round-filters">
           <button class="round-tab active" onclick="setFilter('all', this)">Todos</button>
-          <button class="round-tab" onclick="setFilter('brazil', this)">🇧🇷 Brasil</button>
+          <button class="round-tab" onclick="setFilter('brazil', this)">Brasil</button>
           <button class="round-tab" onclick="setFilter('groups', this)">Grupos</button>
           <button class="round-tab" onclick="setFilter('r16', this)">Oitavas</button>
           <button class="round-tab" onclick="setFilter('qf', this)">Quartas</button>
@@ -245,12 +171,14 @@
 
     </div><!-- /matches-col -->
 
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR (desktop only) -->
     <div class="sidebar">
 
       <!-- CONVIDAR AMIGOS -->
       <div class="invite-card">
-        <div class="invite-emoji">📲</div>
+        <div class="invite-icon">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </div>
         <div class="invite-title">Chama os amigos!</div>
         <div class="invite-sub">Quanto mais gente, mais animado fica o bolão. Manda o link pelo WhatsApp agora.</div>
         <button class="btn-invite" onclick="shareWhatsApp()">
@@ -261,7 +189,10 @@
 
       <!-- RANKING -->
       <div class="sidebar-card">
-        <div class="sidebar-card-title">🏆 Ranking geral</div>
+        <div class="sidebar-card-title">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+          Ranking geral
+        </div>
         <div id="ranking-sidebar">
           <div style="color:var(--fg-subtle);font-size:var(--text-sm);text-align:center;padding:var(--space-4)">Carregando...</div>
         </div>
@@ -269,7 +200,10 @@
 
       <!-- REGRAS DE PONTUAÇÃO -->
       <div class="sidebar-card">
-        <div class="sidebar-card-title">📋 Como pontuar</div>
+        <div class="sidebar-card-title">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Como pontuar
+        </div>
         <div class="rule-item">
           <span class="rule-label">Placar exato</span>
           <span class="rule-pts">10 pts</span>
@@ -284,14 +218,17 @@
         </div>
         <div class="rule-item">
           <span class="rule-label">Jogos do Brasil</span>
-          <span class="rule-pts green">×3 tudo</span>
+          <span class="rule-pts" style="color:var(--brand-yellow)">×3 tudo</span>
         </div>
         <div class="rule-item">
           <span class="rule-label">Placar exato Brasil</span>
-          <span class="rule-pts green">+ R$30</span>
+          <span class="rule-pts" style="color:var(--brand-yellow)">+ R$30</span>
         </div>
-        <div style="margin-top:var(--space-4);padding:var(--space-3);background:rgba(245,168,0,.07);border-radius:var(--radius-md);border:1px solid rgba(245,168,0,.15)">
-          <div style="font-size:var(--text-xs);color:var(--brand-orange);font-weight:var(--weight-bold);margin-bottom:var(--space-1)">🥇 Prêmio do 1º lugar</div>
+        <div style="margin-top:var(--space-4);padding:var(--space-3);background:var(--orange-bg);border-radius:var(--radius-md);border:1px solid var(--orange-border)">
+          <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);color:var(--brand-orange);font-weight:var(--weight-bold);margin-bottom:var(--space-1)">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+            Prêmio do 1º lugar
+          </div>
           <div style="font-size:var(--text-xs);color:var(--fg-muted);line-height:1.5">1 pizza por mês durante 12 meses · Retirada no local · Sem custo algum</div>
         </div>
       </div>
@@ -310,6 +247,7 @@
 <div id="toast-container"></div>
 
 <script src="js/supabase.js"></script>
+<script src="js/icons.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/banners.js"></script>
 <script src="js/matches.js"></script>
@@ -341,12 +279,12 @@ function setFilter(filter, btn) {
 function shareWhatsApp() {
   const url = window.location.origin + (window.location.pathname.replace(/\/$/, ''));
   const text =
-    `🍕 *Bolão Copa 2026 — Vai Ter Pizza!*\n\n` +
+    `*Bolão Copa 2026 — Vai Ter Pizza!*\n\n` +
     `Participe do nosso bolão GRATUITO!\n` +
-    `✅ Faça palpites nos jogos da Copa\n` +
-    `🎟️ Ganhe cupons de desconto a cada placar exato\n` +
-    `🏆 1º lugar ganha *1 pizza por mês durante 1 ano*!\n\n` +
-    `👉 ${url}`;
+    `Faça palpites nos jogos da Copa\n` +
+    `Ganhe cupons de desconto a cada placar exato\n` +
+    `1º lugar ganha *1 pizza por mês durante 1 ano*!\n\n` +
+    `Acesse: ${url}`;
   window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
 }
 
@@ -354,7 +292,6 @@ function shareWhatsApp() {
 async function init() {
   const session = getSession();
   loadHeroImage();
-  loadBanners();
   await loadMatches();
   if (session) await loadMyPredictions(session.id);
   renderMatchList('match-list', { filter: 'all' });
@@ -368,10 +305,9 @@ async function init() {
 }
 
 function checkPendingCTA() {
-  const session  = getSession();
-  const pending  = getPending();
-  const cta      = document.getElementById('palpitar-cta');
-  cta.style.display = (!session && pending.length > 0) ? '' : 'none';
+  const pending = getPending();
+  const cta     = document.getElementById('palpitar-cta');
+  if (cta) cta.style.display = (!getSession() && pending.length > 0) ? '' : 'none';
 }
 
 setInterval(checkPendingCTA, 2000);

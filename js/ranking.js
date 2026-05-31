@@ -20,7 +20,7 @@ async function loadRanking(containerId, limit = 10) {
     el.innerHTML = rows.map((p, i) => {
       const pos   = i + 1;
       const isMe  = session && session.id === p.id;
-      const posLbl = pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : `${pos}º`;
+      const posLbl = `${pos}º`;
       const posClass = pos <= 3 ? `top${pos}` : '';
       return `<div class="rank-item ${isMe ? 'is-me' : ''}">
         <div class="rank-pos ${posClass}">${posLbl}</div>

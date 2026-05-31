@@ -93,9 +93,9 @@ function renderMatchCard(m, session, now) {
   let predStatusHtml = '';
   if (finished && pred) {
     if (pred.is_exact) {
-      predStatusHtml = `<div class="pred-status pred-exact">🎯 Placar exato! +${pred.points_earned} pontos${isBrazil ? ' (Brasil ×3)' : ''}</div>`;
+      predStatusHtml = `<div class="pred-status pred-exact"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Placar exato! +${pred.points_earned} pts${isBrazil ? ' (Brasil ×3)' : ''}</div>`;
     } else if (pred.points_earned > 0) {
-      predStatusHtml = `<div class="pred-status pred-partial">✓ Acertou o resultado. +${pred.points_earned} pontos</div>`;
+      predStatusHtml = `<div class="pred-status pred-partial"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Acertou o resultado. +${pred.points_earned} pts</div>`;
     } else if (pred.id) {
       predStatusHtml = `<div class="pred-status pred-miss">Não acertou desta vez.</div>`;
     }
@@ -107,8 +107,8 @@ function renderMatchCard(m, session, now) {
     <div class="match-card ${isBrazil ? 'brazil' : ''} ${finished ? 'finished' : ''}"
          data-id="${m.id}">
       ${isBrazil && !finished ? `<div class="brazil-badge">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        Jogo do Brasil — Pontos ×3 e R$30 no placar exato!
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        Brasil — pontos ×3 · R$30 no placar exato
       </div>` : ''}
       <div class="match-header">
         <div class="match-meta">
