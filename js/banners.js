@@ -323,7 +323,7 @@ function previewBannerImage(input) {
 async function uploadBannerImage(file) {
   const ext  = file.name.split('.').pop().toLowerCase();
   const name = `banner-${Date.now()}.${ext}`;
-  const r = await fetch(`${BOLAO_URL}/storage/v1/object/banners/${name}`, {
+  const r = await fetch(`${BOLAO_URL}/storage/v1/object/Banners/${name}`, {
     method: 'POST',
     headers: { 'apikey': BOLAO_KEY, 'Authorization': `Bearer ${BOLAO_KEY}`, 'Content-Type': file.type },
     body: file
@@ -333,7 +333,7 @@ async function uploadBannerImage(file) {
     try { const j = await r.json(); msg = j.message || j.error || JSON.stringify(j); } catch (_) {}
     throw new Error(msg);
   }
-  return `${BOLAO_URL}/storage/v1/object/public/banners/${name}`;
+  return `${BOLAO_URL}/storage/v1/object/public/Banners/${name}`;
 }
 
 function selectGrad(btn, val) {
