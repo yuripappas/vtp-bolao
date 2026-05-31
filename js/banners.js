@@ -2,6 +2,19 @@ let _banners = [];
 let _bannerIdx = 0;
 let _bannerTimer = null;
 
+// ── HERO IMAGE ────────────────────────────────────────────────────────────────
+
+async function loadHeroImage() {
+  try {
+    const rows = await db.get('bolao_config', { select: 'value', filter: 'key=eq.hero_image_url' });
+    if (!rows.length || !rows[0].value) return;
+    const hero = document.getElementById('hero-section');
+    if (!hero) return;
+    hero.classList.add('hero-image-mode');
+    hero.innerHTML = `<img src="${rows[0].value}" alt="Banner Bolão Vai Ter Pizza">`;
+  } catch (_) {}
+}
+
 async function loadBanners() {
   const el = document.getElementById('banner-carousel');
   if (!el) return;
@@ -108,8 +121,32 @@ async function adminLoadBanners() {
     return;
   }
 
+  // Hero image section
+  let heroUrl = '';
+  try {
+    const cfg = await db.get('bolao_config', { select: 'value', filter: 'key=eq.hero_image_url' });
+    heroUrl = cfg[0]?.value || '';
+  } catch (_) {}
+
   el.innerHTML = `
-    <div style="display:flex;justify-content:flex-end;margin-bottom:var(--space-4)">
+    <div class="card" style="margin-bottom:var(--space-5);padding:var(--space-5)">
+      <div style="font-size:var(--text-sm);font-weight:var(--weight-bold);color:var(--fg);margin-bottom:var(--space-3)">
+        Hero banner (imagem principal do site)
+      </div>
+      ${heroUrl
+        ? `<img src="${heroUrl}" style="width:100%;max-height:160px;object-fit:cover;border-radius:var(--radius-lg);margin-bottom:var(--space-3);display:block">`
+        : `<div style="background:var(--bg-subtle);border-radius:var(--radius-lg);height:80px;display:flex;align-items:center;justify-content:center;color:var(--fg-subtle);font-size:var(--text-sm);margin-bottom:var(--space-3)">Nenhuma imagem — exibindo hero padrão</div>`}
+      <div style="display:flex;gap:var(--space-2);align-items:center">
+        <input type="file" id="hero-file-input" accept="image/png,image/jpeg,image/webp"
+          style="flex:1;font-size:var(--text-sm)" onchange="previewHeroFile(this)">
+        <button class="btn btn-primary btn-sm" style="width:auto;white-space:nowrap" onclick="saveHeroImage()">Salvar hero</button>
+        ${heroUrl ? `<button class="btn btn-ghost btn-sm" style="width:auto;color:var(--danger-fg);border-color:var(--danger-border)" onclick="removeHeroImage()">Remover</button>` : ''}
+      </div>
+      <div id="hero-img-preview" style="margin-top:var(--space-2)"></div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4)">
+      <div style="font-size:var(--text-sm);font-weight:var(--weight-bold);color:var(--fg)">Banners do carrossel</div>
       <button class="btn btn-primary btn-sm" style="width:auto" onclick="showAddBannerModal()">+ Novo banner</button>
     </div>
     ${rows.length === 0
@@ -218,6 +255,51 @@ function showAddBannerModal(existing) {
   document.body.appendChild(el);
 
   toggleGradientSection();
+}
+
+// ── HERO ADMIN ────────────────────────────────────────────────────────────────
+
+function previewHeroFile(input) {
+  const file = input.files[0];
+  const preview = document.getElementById('hero-img-preview');
+  if (!file || !preview) return;
+  preview.innerHTML = `<img src="${URL.createObjectURL(file)}"
+    style="width:100%;max-height:140px;object-fit:cover;border-radius:var(--radius-lg);display:block">`;
+}
+
+async function saveHeroImage() {
+  const input = document.getElementById('hero-file-input');
+  const file  = input?.files?.[0];
+  if (!file) return toast('Selecione uma imagem primeiro', 'warn');
+
+  const btn = document.querySelector('[onclick="saveHeroImage()"]');
+  if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+
+  try {
+    const url = await uploadBannerImage(file);
+    await upsertConfig('hero_image_url', url);
+    toast('Hero atualizado!', 'ok');
+    adminLoadBanners();
+  } catch (_) {
+    toast('Erro ao salvar hero. Verifique se o bucket "banners" existe.', 'err');
+    if (btn) { btn.disabled = false; btn.textContent = 'Salvar hero'; }
+  }
+}
+
+async function removeHeroImage() {
+  if (!confirm('Remover a imagem do hero? O site voltará ao layout padrão com texto.')) return;
+  await upsertConfig('hero_image_url', '');
+  toast('Imagem removida', 'ok');
+  adminLoadBanners();
+}
+
+async function upsertConfig(key, value) {
+  const existing = await db.get('bolao_config', { select: 'id', filter: `key=eq.${key}` });
+  if (existing.length) {
+    await db.update('bolao_config', `key=eq.${key}`, { value });
+  } else {
+    await db.insert('bolao_config', { key, value });
+  }
 }
 
 function toggleGradientSection() {

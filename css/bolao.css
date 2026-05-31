@@ -75,6 +75,21 @@ body {
   position: relative;
   overflow: hidden;
 }
+.hero.hero-image-mode {
+  padding: 0;
+  background: #000;
+  min-height: unset;
+}
+.hero.hero-image-mode::before { display: none; }
+.hero.hero-image-mode img {
+  width: 100%;
+  display: block;
+  max-height: 420px;
+  object-fit: cover;
+}
+@media (max-width: 480px) {
+  .hero.hero-image-mode img { max-height: 220px; }
+}
 .hero::before {
   content: '';
   position: absolute;

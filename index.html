@@ -89,7 +89,7 @@
 <div id="banner-carousel"></div>
 
 <!-- HERO -->
-<div class="hero">
+<div class="hero" id="hero-section">
   <div class="hero-eyebrow">Vai Ter Pizza! · Bolão Copa 2026</div>
   <h1>Palpite. Pontue.<br><em>Ganhe pizza.</em></h1>
   <p class="hero-sub">Acerte os placares, acumule pontos e concorra ao maior prêmio da Copa.</p>
@@ -353,6 +353,7 @@ function shareWhatsApp() {
 /* ── INIT ────────────────────────────────────────────────────── */
 async function init() {
   const session = getSession();
+  loadHeroImage();
   loadBanners();
   await loadMatches();
   if (session) await loadMyPredictions(session.id);
